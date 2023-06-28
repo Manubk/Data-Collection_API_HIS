@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.dc.dto.BankDto;
 import com.dc.dto.ChildrenDto;
 import com.dc.dto.ChildrenRequestDto;
 import com.dc.dto.DcSummery;
@@ -21,7 +22,7 @@ public interface IDcService {
 	
 	public Long loadCaseNum(Long appId);
 	
-	public PlanSelectionDto createCaseId(Long appId);
+	public PlanSelectionDto createCaseNum(Long appId);
 	
 	public Long savePlanToCase(PlanSelectionRequestDto planSelectionRequestDto);;
 	
@@ -30,6 +31,8 @@ public interface IDcService {
 	public Long saveEducation(EducationDto educationDto);
 	
 	public Long saveChildrens(ChildrenRequestDto childrenDtos);
+	
+	public Long saveBankDetails(BankDto bankDto);
 	
 	public DcSummery getDCSummery(Long caseNum);
 	

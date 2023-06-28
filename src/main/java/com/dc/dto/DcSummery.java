@@ -2,6 +2,8 @@ package com.dc.dto;
 
 import java.util.List;
 
+import com.dc.entity.BankEntity;
+
 import lombok.Data;
 
 @Data
@@ -14,6 +16,8 @@ public class DcSummery {
 	private IncomeDto incomeDto;
 	
 	private EducationDto educationDto;
+	
+	private BankEntity bank;
 	
 	private List<ChildrenDto> childrenDtos;
 	

@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dc.dto.BankDto;
 import com.dc.dto.ChildrenDto;
 import com.dc.dto.ChildrenRequestDto;
 import com.dc.dto.DcSummery;
@@ -20,12 +21,14 @@ import com.dc.dto.IncomeDto;
 import com.dc.dto.PlanSelectionDto;
 import com.dc.dto.PlanSelectionRequestDto;
 import com.dc.entity.ApplicationRegistration;
+import com.dc.entity.BankEntity;
 import com.dc.entity.DcCase;
 import com.dc.entity.DcChildren;
 import com.dc.entity.DcEducation;
 import com.dc.entity.DcIncome;
 import com.dc.entity.PlanEntity;
 import com.dc.repo.ApplicationRegistrationRepo;
+import com.dc.repo.BankEntityRepo;
 import com.dc.repo.DcCaseRepo;
 import com.dc.repo.DcChildrenRepo;
 import com.dc.repo.DcEducationRepo;
@@ -57,6 +60,9 @@ public class DcService  implements IDcService{
 	@Autowired
 	private ApplicationRegistrationRepo appRegRepo;
 	
+	@Autowired
+	private BankEntityRepo bankRepo;
+	
 	@Override
 	public Long loadCaseNum(Long appId) {
 		log.info("loadCaseNum appId = "+appId);
@@ -66,14 +72,14 @@ public class DcService  implements IDcService{
 		
 		DcCase dcCaseSaved = caseRepo.save(dcCase);		
 		
-		if(dcCaseSaved.getCaseNum() != null)
+		if(dcCaseSaved.getCaseNum()!= null || dcCaseSaved.getCaseNum() != 0l)
 			return dcCaseSaved.getCaseNum();
 	
-		return (long)0;
+		return 0l;
 	}
 
 	@Override
-	public PlanSelectionDto createCaseId(Long appId) {
+	public PlanSelectionDto createCaseNum(Long appId) {
 		log.info("createCaseId appId = " + appId);
 
 		DcCase dcCase = new DcCase();
@@ -81,9 +87,10 @@ public class DcService  implements IDcService{
 
 		DcCase dcCaseSaved = caseRepo.save(dcCase);
 
-		if (dcCaseSaved.getCaseNum() != null) {
+		if (dcCaseSaved.getCaseNum() != null || dcCaseSaved.getCaseNum() != 0) {
 			PlanSelectionDto planSelectionDto = new PlanSelectionDto();
-			// TODO getall plans 
+			
+			planSelectionDto.setPlans(findAllPlans());
 			
 			planSelectionDto.setCaseNum(dcCaseSaved.getCaseNum());
 			return planSelectionDto;
@@ -181,6 +188,14 @@ public class DcService  implements IDcService{
 		BeanUtils.copyProperties(education, educationDto);
 		
 		/*
+		 * Getting bank Details
+		 */
+		
+		BankEntity bankEntity = bankRepo.findByCaseNum(caseNum);
+		BankDto bankDto = new BankDto();
+		BeanUtils.copyProperties(bankEntity, bankDto);
+		bankDto.setAccNumber(starPassword(bankDto.getAccNumber()));
+		/*
 		 * Setting Up Children Details
 		 */
 		List<DcChildren> childrens = childrenRepo.findByCaseNum(caseNum);
@@ -228,6 +243,28 @@ public class DcService  implements IDcService{
 		});
 		
 		return planMap;
+	}
+
+	@Override
+	public Long saveBankDetails(BankDto bankDto) {
+		log.info("saveBankDetails caseNum = "+bankDto.getCaseNum());
+		
+		BankEntity bank = new BankEntity();
+		
+		BeanUtils.copyProperties(bankDto,bank);
+		
+		BankEntity savedBank = bankRepo.save(bank);
+		
+		if(savedBank.getBankId() != null)
+			return bankDto.getCaseNum();
+		
+		return 0l;
+	}
+	
+	
+	public String starPassword(String value) {
+		log.info("starPassword");
+		return value.replaceAll("\\w(?=\\w{4})", "*");
 	}
 	
 	
