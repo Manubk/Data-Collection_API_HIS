@@ -39,4 +39,7 @@ public class PlanEntity  {
 	
 	@Column(name = "ACTIVE_SW" , columnDefinition = "varchar(1) default 'A'")
 	private String activeSw = AppConstants.ACTIVATE;
+	
+	@Column(name = "INCOME_LIMIT")
+	public Double incomeLimit;
 }
