@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dc.dto.AppRegDto;
 import com.dc.dto.BankDto;
 import com.dc.dto.ChildrenDto;
 import com.dc.dto.ChildrenRequestDto;
@@ -148,7 +149,6 @@ public class DcService  implements IDcService{
 		return childrenDto.getCaseNum();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public DcSummery getDCSummery(Long caseNum) {
 		log.info("getDCSummery caseNum = "+caseNum);
@@ -158,6 +158,7 @@ public class DcService  implements IDcService{
 		
 		String planName = "";
 		String ssn ="";
+		AppRegDto appRegDto = null;
 		
 		/*
 		 * Getting Up Plan and Applicent Details
@@ -171,6 +172,9 @@ public class DcService  implements IDcService{
 			
 			Optional<ApplicationRegistration> OAppReg = appRegRepo.findById(dcCase.getAppId());
 			ssn = OAppReg.get().getSsn();	
+			 appRegDto = new AppRegDto();
+			BeanUtils.copyProperties(OAppReg.get(), appRegDto);
+			
 		}
 		
 		/*
@@ -214,6 +218,8 @@ public class DcService  implements IDcService{
 		summery .setIncomeDto(incomeDto);
 		summery.setEducationDto(educationDto);
 		summery.setChildrenDtos(childrenDtos);
+		summery.setBank(bankEntity);
+		summery.setAppRegDto(appRegDto);
 		
 		return summery ;
 	}

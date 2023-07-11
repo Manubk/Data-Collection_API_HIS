@@ -10,27 +10,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dc.dto.EducationDto;
+import com.dc.dto.BankDto;
 import com.dc.serviceinterface.IDcService;
 
 @CrossOrigin
 @RestController
-public class EducationController {
-
+public class BankDetailsController {
 	
-	private static final Logger log = LoggerFactory.getLogger(EducationController.class);
+	
+	private static final Logger log = LoggerFactory.getLogger(BankDetailsController.class);
 
 	@Autowired
 	private IDcService dcService;
 	
-	@PostMapping("/education")
-	public ResponseEntity<Long> saveEducation(@RequestBody EducationDto educationDto){
-		log.info("saveEducation caseNum = "+educationDto.getCaseNum());
+	@PostMapping("/bank")
+	public ResponseEntity<Long> saveBank(@RequestBody BankDto bankDto){
+		log.info("saveBank");
 		
-		Long caseNum = dcService.saveEducation(educationDto);
+		Long caseNum = dcService.saveBankDetails(bankDto);
 		
-		return new ResponseEntity<Long>(caseNum,HttpStatus.CREATED);
+		return new ResponseEntity<Long>(caseNum,HttpStatus.OK);
 		
 	}
 	
+
 }

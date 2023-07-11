@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dc.dto.DcSummery;
 import com.dc.serviceinterface.IDcService;
 
+@CrossOrigin
 @RestController
 public class SummaryController {
 	
@@ -21,9 +24,9 @@ public class SummaryController {
 	private IDcService dcService;
 	
 	@GetMapping("/summary/{caseNum}")
-	public ResponseEntity<DcSummery> getSummary(Long caseNum){
+	public ResponseEntity<DcSummery> getSummary(@PathVariable Long caseNum){
 		log.info("getSummary caseNum = "+caseNum);
-		
+			
 		DcSummery dcSummery = dcService.getDCSummery(caseNum);
 		
 		return new ResponseEntity<DcSummery>(dcSummery,HttpStatus.OK);

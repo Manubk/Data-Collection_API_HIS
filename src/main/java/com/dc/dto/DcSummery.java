@@ -11,6 +11,8 @@ public class DcSummery {
 	
 	private Long caseNum;
 	
+	private AppRegDto appRegDto;
+	
 	private String planName;
 	
 	private IncomeDto incomeDto;
